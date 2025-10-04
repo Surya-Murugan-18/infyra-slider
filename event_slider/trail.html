@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rocket Launch Countdown</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('image/mars-bg.jpg') no-repeat center center;
+      background-size: cover;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .mission-info {
+      text-align: center;
+    }
+
+    .mission-info h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .mission-info p {
+      font-size: 1.2rem;
+      color: #ccc;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .circle {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .circle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+    }
+
+    .circle svg {
+      transform: rotate(-90deg);
+    }
+
+    .circle circle {
+      fill: none;
+      stroke-width: 12;
+      stroke-linecap: round;
+    }
+
+    .circle .bg {
+      stroke: #444;
+    }
+
+    .circle .progress {
+      stroke-dasharray: 314;
+      stroke-dashoffset: 314;
+      transition: stroke-dashoffset 1s linear;
+      filter: drop-shadow(0 0 5px currentColor);
+    }
+
+    .circle .label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .circle .label .number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .circle .label .unit {
+      font-size: 0.9rem;
+      color: #ddd;
+      letter-spacing: 1px;
+    }
+
+    .days .progress {
+      stroke: #ff5555;
+    }
+
+    .hours .progress {
+      stroke: #ffbb33;
+    }
+
+    .minutes .progress {
+      stroke: #ffee33;
+    }
+
+    .seconds .progress {
+      stroke: #33ff77;
+    }
+
+    #Rocket {
+      width: 500px;
+      height: 500px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        gap: 20px;
+      }
+
+      .mission-info h1 {
+        font-size: 1.8rem;
+      }
+
+      .mission-info p {
+        font-size: 1rem;
+      }
+
+      .countdown {
+        gap: 15px;
+      }
+
+      .circle {
+        width: 100px;
+        height: 100px;
+      }
+
+      .circle .label .number {
+        font-size: 1.4rem;
+      }
+
+      .circle .label .unit {
+        font-size: 0.7rem;
+      }
+
+      #Rocket {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .countdown {
+        gap: 10px;
+      }
+
+      .circle {
+        width: 80px;
+        height: 80px;
+      }
+
+      .circle .label .number {
+        font-size: 1.2rem;
+      }
+
+      .circle .label .unit {
+        font-size: 0.6rem;
+      }
+
+      #Rocket {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="mission-info">
+      <h1>Mars Mission Launch</h1>
+      <p>Countdown to the historic journey to the Red Planet</p>
+    </div>
+
+    <div class="countdown">
+      <div class="circle days">
+        <svg width="130" height="130">
+          <circle class="bg" cx="65" cy="65" r="55"></circle>
+          <circle class="progress" cx="65" cy="65" r="55"></circle>
+        </svg>
+        <div class="label">
+          <div class="number" id="days">0</div>
+          <div class="unit">DAYS</div>
+        </div>
+      </div>
+
+      <div class="circle hours">
+        <svg width="130" height="130">
+          <circle class="bg" cx="65" cy="65" r="55"></circle>
+          <circle class="progress" cx="65" cy="65" r="55"></circle>
+        </svg>
+        <div class="label">
+          <div class="number" id="hours">0</div>
+          <div class="unit">HOURS</div>
+        </div>
+      </div>
+
+      <div class="circle minutes">
+        <svg width="130" height="130">
+          <circle class="bg" cx="65" cy="65" r="55"></circle>
+          <circle class="progress" cx="65" cy="65" r="55"></circle>
+        </svg>
+        <div class="label">
+          <div class="number" id="minutes">0</div>
+          <div class="unit">MINUTES</div>
+        </div>
+      </div>
+
+      <div class="circle seconds">
+        <svg width="130" height="130">
+          <circle class="bg" cx="65" cy="65" r="55"></circle>
+          <circle class="progress" cx="65" cy="65" r="55"></circle>
+        </svg>
+        <div class="label">
+          <div class="number" id="seconds">0</div>
+          <div class="unit">SECONDS</div>
+        </div>
+      </div>
+    </div>
+
+    <model-viewer id="Rocket" src="./h-iia_-_sc04-aii_-_rocket.glb" autoplay camera-controls auto-rotate shadow-intensity="1" min-camera-orbit="auto 85deg 61.46m" min-field-of-view="20.11deg" max-camera-orbit="auto 137deg auto">
+    </model-viewer>
+  </div>
+
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+
+  <script>
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    const daysProgress = document.querySelector('.days .progress');
+    const hoursProgress = document.querySelector('.hours .progress');
+    const minutesProgress = document.querySelector('.minutes .progress');
+    const secondsProgress = document.querySelector('.seconds .progress');
+
+    const fullCircle = 2 * Math.PI * 55;
+
+    function updateCountdown() {
+      const targetDate = new Date('September 25, 2025 00:00:00').getTime();
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        daysEl.innerText = '0';
+        hoursEl.innerText = '0';
+        minutesEl.innerText = '0';
+        secondsEl.innerText = '0';
+        clearInterval(timerInterval);
+        document.querySelector('.mission-info h1').innerText = 'Launch Complete!';
+        document.querySelector('.mission-info p').innerText = 'The Mars Mission has begun!';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.innerText = days;
+      hoursEl.innerText = hours;
+      minutesEl.innerText = minutes;
+      secondsEl.innerText = seconds;
+
+      daysProgress.style.strokeDashoffset = fullCircle * (1 - Math.min(days / 365, 1));
+      hoursProgress.style.strokeDashoffset = fullCircle * (1 - hours / 24);
+      minutesProgress.style.strokeDashoffset = fullCircle * (1 - minutes / 60);
+      secondsProgress.style.strokeDashoffset = fullCircle * (1 - seconds / 60);
+    }
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+
+</html>
